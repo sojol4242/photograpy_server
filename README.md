@@ -9,13 +9,15 @@
 
  <li>CSS</li>
 
+ <li>A little bit of framer motion</li>
+
 <li>Bootstrap</li>
 
 <li>Font awesome</li>
 
 <li>Html</li>
 
-<
+ 
 
 </ul>
 <h4>Technology Used : (BackEnd)</h4>
@@ -36,7 +38,7 @@
 <ul>
 <li>Practice MERN Fundamental</li>
 
-<li>Deploy in Firebase</li>
+<li>Deploy in Firebase & Heroku</li>
 
 <li>React props,components,hooks</li>
 
@@ -46,4 +48,4 @@
 
 <a href="https://github.com/Porgramming-Hero-web-course/complete-website-client-sojol4242">Client Side Repo</a>
 
-<strong>project live site : </strong> <a href="https://laptop-bazar-2e5ba.web.app/">Live</a>
+<strong>project live site - </strong> <a href="https://photography-2021.web.app/">Live</a>
