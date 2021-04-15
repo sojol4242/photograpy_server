@@ -44,6 +44,6 @@
 
 </ul>
 
-<a href="https://github.com/Porgramming-Hero-web-course/full-stack-client-sojol4242">Client Side Repo</a>
+<a href="https://github.com/Porgramming-Hero-web-course/complete-website-client-sojol4242">Client Side Repo</a>
 
 <strong>project live site : </strong> <a href="https://laptop-bazar-2e5ba.web.app/">Live</a>
