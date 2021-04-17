@@ -4,7 +4,7 @@ const cors = require('cors');
 const colors = require('colors');
 const ObjectId = require('mongodb').ObjectID;
 const MongoClient = require('mongodb').MongoClient;
-const port =process.env.PORT || 6565;//|| 
+const port =process.env.PORT || 5000;//|| 
 
 require('dotenv').config()
 
@@ -33,18 +33,11 @@ app.use(cors());
 
 client.connect(err => {
   const  serviceCollection = client.db("photography").collection("newServices");
+  const  userCollection = client.db("photography").collection("userCollection");
+  const  reviewCollection=client.db("photography").collection("reviewCollection");
 
-    console.log(err);
-    // const adminCollection = client.db("assignment-10").collection("adminCollection");
-    
-    // const  userCollection = client.db("assignment-10").collection("userCollection");
-
-
-    
+    console.log(err); 
     console.log(`MongoDb connected for assignment 11 given by programming hero`.magenta);
-
-
-
     
         // admin:  add services :
     app.post('/addServices', (req, res) => {
@@ -54,56 +47,84 @@ client.connect(err => {
             .then(result => {
                 console.log(result.insertedCount>0);
                 res.send(result.insertedCount>0)
-            })
-        
-        // productCollection.insertOne(newProduct)
-        //     .then(result => {
-        //         console.log(result.insertedCount>0);
-        //         res.send(result.insertedCount>0)
-        // })
-       
-      
-       
-        
+            })       
     })
-
-    // load data from database and show home
-    // app.get('/getProduct', (req, res) => {
-    //     productCollection.find({})
-    //         .toArray((err, docs) => {
-    //         res.send(docs)
-    //     })
-               
-    // })
-
-
-    //  get  newest services :
- 
+//  get  newest services and show home: 
+app.get('/getNewServices', (req, res) => {
+    serviceCollection.find({})
+    .toArray((err, docs) => {
+        res.send(docs);
+    })
+})
+// // get all user service order
+// app.get('/getAllOrder', (req, res) => {
+//     userCollection.find({})
+//     .toArray((err, docs) => {
+//         res.send(docs);
+//     })
+// })
     
-       app.get('/getNewServices', (req, res) => {
-        serviceCollection.find({})
-        .toArray((err, docs) => {
-            res.send(docs);
-        })
-    })
 
 // delete data from admin and home page :
-//   app.delete('/delete/:id', (req, res) => {
-//         console.log(req.params.id)
-//          productCollection.deleteOne({_id: ObjectId(req.params.id)})
-//         .then(result => {
-//           console.log(result);
-//           res.send(result.deletedCount > 0);
-//         })
-//          adminCollection.deleteOne({_id: ObjectId(req.params.id)})
-//         .then(result => {
-//           console.log(result);
-//           res.send(result.deletedCount > 0);
-//         })
-        
-      
-//     })
+app.delete('/delete/:id', (req, res) => {
+    console.log(req.params.id)
+     serviceCollection.deleteOne({_id: ObjectId(req.params.id)})
+    .then(result => {
+      console.log(result);
+      res.send(result.deletedCount > 0);
+    })
+   
+    
+  
+})
 
+//service added by user in his/her list
+app.post('/checkoutService', (req, res) => {
+    const userProduct = req.body;
+
+    userCollection.insertOne(userProduct)
+        .then(result => {
+            console.log(result.insertedCount>0);
+            res.send(result.insertedCount>0)
+    })
+})     
+
+    
+app.get('/checkout', (req, res) => {
+    userCollection.find({})
+    .toArray((err, docs) => {
+        res.send(docs);
+    })
+})
+
+// add review to database by user
+
+app.post('/addReview', (req, res) => {
+    const newService = req.body;
+    console.log(newService);
+    reviewCollection.insertOne(newService)
+        .then(result => {
+            console.log(result.insertedCount>0);
+            res.send(result.insertedCount>0)
+        })       
+})
+
+app.get('/getReview', (req, res) => {
+    reviewCollection.find({})
+    .toArray((err, docs) => {
+        res.send(docs);
+    })
+})
+
+});
+
+
+
+// server port : 
+app.listen(port, ( ) => {
+    console.log(`Server is running on ${port} Successfully`.blue);
+})
+ 
 
 // users order & checkout:
 
@@ -137,18 +158,34 @@ client.connect(err => {
       
     // })
     
+    
+    // load data from database and show home
+    // app.get('/getProduct', (req, res) => {
+    //     productCollection.find({})
+    //         .toArray((err, docs) => {
+    //         res.send(docs)
+    //     })
+               
+    // })
 
 
-});
+
+// delete data from admin and home page :
+//   app.delete('/delete/:id', (req, res) => {
+//         console.log(req.params.id)
+//          productCollection.deleteOne({_id: ObjectId(req.params.id)})
+//         .then(result => {
+//           console.log(result);
+//           res.send(result.deletedCount > 0);
+//         })
+//          adminCollection.deleteOne({_id: ObjectId(req.params.id)})
+//         .then(result => {
+//           console.log(result);
+//           res.send(result.deletedCount > 0);
+//         })
+        
+      
+//     })
 
 
 
-
-
-
-
-// server port : 
-app.listen(port, ( ) => {
-    console.log(`Server is running on ${port} Successfully`.blue);
-})
- 
