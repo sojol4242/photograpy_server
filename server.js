@@ -107,7 +107,7 @@ client.connect((err) => {
 });
 
 
-app.get("/getAdmin", (req, res) => {
+app.post("/getAdmin", (req, res) => {
     const email = req.body.email;
     console.log(email);
 
