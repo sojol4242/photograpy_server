@@ -64,6 +64,22 @@ client.connect((err) => {
       res.send(result.insertedCount > 0);
     });
   });
+ 
+  app.post('/getAdmin', (req, res) => {
+    const email = req.body.email;
+    adminCollection.find({ email: email })
+        .toArray((err, admin) => {
+            res.send(admin.length > 0);
+        })
+})
+
+});
+  
+
+
+
+
+
   //  get  newest services and show home:
   app.get("/getNewServices", (req, res) => {
     serviceCollection.find({}).toArray((err, docs) => {
@@ -116,14 +132,6 @@ client.connect((err) => {
   });
 });
 
-app.post("/getAdmin", (req, res) => {
-  const email = req.body.email;
-  console.log(email);
-
-  serviceCollection.find({ email: email }).toArray((err, docs) => {
-    res.send(docs.length > 0);
-  });
-});
 
 // server port :
 app.listen(port, () => {
