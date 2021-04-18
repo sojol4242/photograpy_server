@@ -37,6 +37,9 @@ client.connect((err) => {
   const reviewCollection = client
     .db("photography")
     .collection("reviewCollection");
+  const adminCollection = client
+    .db("photography")
+    .collection("adminCollection");
 
   console.log(err);
   console.log(
@@ -52,25 +55,32 @@ client.connect((err) => {
       res.send(result.insertedCount > 0);
     });
   });
+  //set a admin
+  app.post("/setAdmin", (req, res) => {
+    const newAdmin = req.body;
+    console.log(newAdmin);
+    adminCollection.insertOne(newAdmin).then((result) => {
+      console.log(result.insertedCount > 0);
+      res.send(result.insertedCount > 0);
+    });
+  });
   //  get  newest services and show home:
   app.get("/getNewServices", (req, res) => {
     serviceCollection.find({}).toArray((err, docs) => {
       res.send(docs);
     });
   });
-  
+
   // delete data from database and home page :
-  app.delete('/delete/:id', (req, res) => {
-    console.log(req.params.id)
-     serviceCollection.deleteOne({_id: ObjectId(req.params.id)})
-    .then(result => {
-      console.log(result);
-      res.send(result.deletedCount > 0);
-    })
-   
-    
-  
-})
+  app.delete("/delete/:id", (req, res) => {
+    console.log(req.params.id);
+    serviceCollection
+      .deleteOne({ _id: ObjectId(req.params.id) })
+      .then((result) => {
+        console.log(result);
+        res.send(result.deletedCount > 0);
+      });
+  });
 
   //service added by user in his/her list
   app.post("/checkoutService", (req, res) => {
@@ -106,23 +116,16 @@ client.connect((err) => {
   });
 });
 
-
 app.post("/getAdmin", (req, res) => {
-    const email = req.body.email;
-    console.log(email);
+  const email = req.body.email;
+  console.log(email);
 
-    serviceCollection.find({email: email})
-    .toArray((err, docs) => {
-             
-            res.send(docs.length > 0);
-       
-    })
-})
-
+  serviceCollection.find({ email: email }).toArray((err, docs) => {
+    res.send(docs.length > 0);
+  });
+});
 
 // server port :
 app.listen(port, () => {
   console.log(`Server is running on ${port} Successfully`.blue);
 });
-
- 
