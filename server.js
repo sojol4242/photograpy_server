@@ -1,72 +1,66 @@
-const express = require('express');
+const express = require("express");
 // const bodyParser = require('body-parser');
-const cors = require('cors');
-const colors = require('colors');
-const ObjectId = require('mongodb').ObjectID;
-const MongoClient = require('mongodb').MongoClient;
-const port =process.env.PORT || 5000;//|| 
+const cors = require("cors");
+const colors = require("colors");
+const ObjectId = require("mongodb").ObjectID;
+const MongoClient = require("mongodb").MongoClient;
+const port = process.env.PORT || 5000; //||
 
-require('dotenv').config()
+require("dotenv").config();
 
 // mongo client
 
 const uri = process.env.MONGO_URI;
 
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 // initialized app
-const app = express()
+const app = express();
 
-//middle 
+//middle
 app.use(express.json());
 app.use(cors());
 
- 
-    //root app
-      app.get('/', (req, res) => {
-         res.send("Welcome to Assignment 11 by Programming Hero");
-         
-    })
-
+//root app
+app.get("/", (req, res) => {
+  res.send("Welcome to Assignment 11 by Programming Hero");
+});
 
 // laptop bazar app
 
-client.connect(err => {
-  const  serviceCollection = client.db("photography").collection("newServices");
-  const  userCollection = client.db("photography").collection("userCollection");
-  const  reviewCollection=client.db("photography").collection("reviewCollection");
+client.connect((err) => {
+  const serviceCollection = client.db("photography").collection("newServices");
+  const userCollection = client.db("photography").collection("userCollection");
+  const reviewCollection = client
+    .db("photography")
+    .collection("reviewCollection");
 
-    console.log(err); 
-    console.log(`MongoDb connected for assignment 11 given by programming hero`.magenta);
-    
-        // admin:  add services :
-    app.post('/addServices', (req, res) => {
-        const newService = req.body;
-        console.log(newService);
-        serviceCollection.insertOne(newService)
-            .then(result => {
-                console.log(result.insertedCount>0);
-                res.send(result.insertedCount>0)
-            })       
-    })
-//  get  newest services and show home: 
-app.get('/getNewServices', (req, res) => {
-    serviceCollection.find({})
-    .toArray((err, docs) => {
-        res.send(docs);
-    })
-})
-// // get all user service order
-// app.get('/getAllOrder', (req, res) => {
-//     userCollection.find({})
-//     .toArray((err, docs) => {
-//         res.send(docs);
-//     })
-// })
-    
+  console.log(err);
+  console.log(
+    `MongoDb connected for assignment 11 given by programming hero`.magenta
+  );
 
-// delete data from admin and home page :
-app.delete('/delete/:id', (req, res) => {
+  // admin:  add services :
+  app.post("/addServices", (req, res) => {
+    const newService = req.body;
+    console.log(newService);
+    serviceCollection.insertOne(newService).then((result) => {
+      console.log(result.insertedCount > 0);
+      res.send(result.insertedCount > 0);
+    });
+  });
+  //  get  newest services and show home:
+  app.get("/getNewServices", (req, res) => {
+    serviceCollection.find({}).toArray((err, docs) => {
+      res.send(docs);
+    });
+  });
+  
+  // delete data from database and home page :
+  app.delete('/delete/:id', (req, res) => {
     console.log(req.params.id)
      serviceCollection.deleteOne({_id: ObjectId(req.params.id)})
     .then(result => {
@@ -78,114 +72,57 @@ app.delete('/delete/:id', (req, res) => {
   
 })
 
-//service added by user in his/her list
-app.post('/checkoutService', (req, res) => {
+  //service added by user in his/her list
+  app.post("/checkoutService", (req, res) => {
     const userProduct = req.body;
 
-    userCollection.insertOne(userProduct)
-        .then(result => {
-            console.log(result.insertedCount>0);
-            res.send(result.insertedCount>0)
-    })
-})     
+    userCollection.insertOne(userProduct).then((result) => {
+      console.log(result.insertedCount > 0);
+      res.send(result.insertedCount > 0);
+    });
+  });
 
-    
-app.get('/checkout', (req, res) => {
-    userCollection.find({})
-    .toArray((err, docs) => {
-        res.send(docs);
-    })
-})
+  app.get("/checkout", (req, res) => {
+    userCollection.find({}).toArray((err, docs) => {
+      res.send(docs);
+    });
+  });
 
-// add review to database by user
+  // add review to database by user
 
-app.post('/addReview', (req, res) => {
+  app.post("/addReview", (req, res) => {
     const newService = req.body;
     console.log(newService);
-    reviewCollection.insertOne(newService)
-        .then(result => {
-            console.log(result.insertedCount>0);
-            res.send(result.insertedCount>0)
-        })       
-})
+    reviewCollection.insertOne(newService).then((result) => {
+      console.log(result.insertedCount > 0);
+      res.send(result.insertedCount > 0);
+    });
+  });
 
-app.get('/getReview', (req, res) => {
-    reviewCollection.find({})
-    .toArray((err, docs) => {
-        res.send(docs);
-    })
-})
-
+  app.get("/getReview", (req, res) => {
+    reviewCollection.find({}).toArray((err, docs) => {
+      res.send(docs);
+    });
+  });
 });
 
 
+app.get("/getAdmin", (req, res) => {
+    const email = req.body.email;
+    console.log(email);
 
-// server port : 
-app.listen(port, ( ) => {
-    console.log(`Server is running on ${port} Successfully`.blue);
+    serviceCollection.find({email: email})
+    .toArray((err, docs) => {
+             
+            res.send(docs.length > 0);
+       
+    })
 })
+
+
+// server port :
+app.listen(port, () => {
+  console.log(`Server is running on ${port} Successfully`.blue);
+});
+
  
-
-// users order & checkout:
-
-//         app.post('/addOrderedProduct', (req, res) => {
-//         const userProduct = req.body;
-
-//         userCollection.insertOne(userProduct)
-//             .then(result => {
-//                 console.log(result.insertedCount>0);
-//                 res.send(result.insertedCount>0)
-//         })
-//    })     
-
-        
-    // app.get('/checkout', (req, res) => {
-    //     userCollection.find({})
-    //     .toArray((err, docs) => {
-    //         res.send(docs);
-    //     })
-    // })
-
-    //  order delete
-    //     app.delete('/userDelete/:id', (req, res) => {
-    //     console.log(req.params.id)
-        
-    //      userCollection.deleteOne({key: ObjectId(req.params.id)})
-    //     .then(result => {
-    //       console.log(result);
-    //       res.send(result.deletedCount > 0);
-    //     })
-      
-    // })
-    
-    
-    // load data from database and show home
-    // app.get('/getProduct', (req, res) => {
-    //     productCollection.find({})
-    //         .toArray((err, docs) => {
-    //         res.send(docs)
-    //     })
-               
-    // })
-
-
-
-// delete data from admin and home page :
-//   app.delete('/delete/:id', (req, res) => {
-//         console.log(req.params.id)
-//          productCollection.deleteOne({_id: ObjectId(req.params.id)})
-//         .then(result => {
-//           console.log(result);
-//           res.send(result.deletedCount > 0);
-//         })
-//          adminCollection.deleteOne({_id: ObjectId(req.params.id)})
-//         .then(result => {
-//           console.log(result);
-//           res.send(result.deletedCount > 0);
-//         })
-        
-      
-//     })
-
-
-
