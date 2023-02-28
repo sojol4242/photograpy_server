@@ -4,7 +4,7 @@ const cors = require("cors");
 const colors = require("colors");
 const ObjectId = require("mongodb").ObjectID;
 const MongoClient = require("mongodb").MongoClient;
-const port = process.env.PORT || 5000; //||
+const port = process.env.PORT || 5000;  
 
 require("dotenv").config();
 
