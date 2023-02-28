@@ -26,7 +26,7 @@ app.use(cors());
 
 //root app
 app.get("/", (req, res) => {
-  res.send("Welcome to Assignment 11 by Programming Hero");
+  res.send("Welcome to Photography Agency");
 });
 
 // laptop bazar app
