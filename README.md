@@ -48,4 +48,4 @@
 
 <a href="https://github.com/Porgramming-Hero-web-course/complete-website-client-sojol4242">Client Side Repo</a>
 
-<strong>project live site - </strong> <a href="https://photography-2021.web.app/">Live</a>
+<strong>project live site - </strong> <a href="https://photography-2021.web.app/">Live</a># picturesque_server
