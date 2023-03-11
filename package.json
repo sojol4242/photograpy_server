@@ -1,14 +1,14 @@
 {
-  "name": "phtography",
+  "name": "photography",
   "version": "1.0.0",
-  "description": "its a photography compnay website which is manage their services",
-  "main": "server.js",
+  "description": "its a photography company website which is manage their services",
+  "main": "index.js",
   "engines": {
     "node":"14.x"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
