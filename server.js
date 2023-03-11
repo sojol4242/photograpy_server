@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to Photography Agency");
 });
 
-// laptop bazar app
+// photography app
 
 client.connect((err) => {
   const serviceCollection = client.db("photography").collection("newServices");
@@ -43,7 +43,7 @@ client.connect((err) => {
 
   console.log(err);
   console.log(
-    `MongoDb connected for assignment 11 given by programming hero`.magenta
+    `MongoDb connected `.magenta
   );
 
   // admin:  add services :
